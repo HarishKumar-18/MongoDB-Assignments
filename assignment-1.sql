@@ -78,10 +78,10 @@ select locate('a', first_name) as position_of_a from worker where first_name = '
 select distinct(department),length(department) from worker;
 
 /*q7*/
-
+select ltrim(department) from worker;
 
 /*q8*/
-
+select department, length(department) from (select distinct department from worker) as uniquedepartments; 
 
 /*q9*/
 select replace(first_name, 'a', 'A') as first_name from worker;
@@ -132,13 +132,13 @@ select department, count(department) as Total_Workers from worker group by depar
 select * from Worker w join Title t on w.worker_id = t.worker_ref_id where t.worker_title = 'Manager';
 
 /*q25*/
-
+select first_name, last_name, count(*) from worker group by first_name, last_name having count(*) > 1; 
 
 /*q26*/
-
+select * from worker where mod(worker_id, 2) <> 0;
 
 /*q27*/
-
+select * from worker where mod(worker_id, 2) = 0;
 
 /*q28*/
 create table new_bonus_clone as select * from bonus;
@@ -186,7 +186,8 @@ select * from worker union all select * from worker;
 select * from worker w right outer join bonus on worker_id = worker_ref_id;
 
 /*q39*/
-
+select * from ( select *, row_number() over (order by worker_id) as row_num  from worker) 
+as temp_table where row_num <= (select count(*) from worker) / 2;
 
 /*q40*/
 select department from worker group by department having count(department) < 5;
